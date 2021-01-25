@@ -26,7 +26,7 @@ function notFound() {
    let header = document.querySelector(".header");
    let input = header.firstElementChild;
 
-   input.insertAdjacentHTML("beforerbegin", input);
+   input.insertAdjacentHTML("beforebegin", input);
 
 }
 
@@ -152,7 +152,7 @@ function search() {
             } 
             if (li.length === counter) {
                counter = 0;
-               notFound();
+               //notFound();
               console.log("not found");
                
             }
