@@ -43,7 +43,12 @@ header h2 {
 	margin-bottom: 25px;
 }
 
+#error {
+  
+  font-size: 25px; 
+  font-weight: bold; 
 
+}
 
 .student-search {
   display: flex;

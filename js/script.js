@@ -42,7 +42,10 @@ function showPage(list, section) {
    for (let i = 0; i < list.length; i += 1) {
       if (i >= startIndex && i < endIndex) {
          let obj = list[i];
-            ul.insertAdjacentHTML("afterbegin", 
+         if (obj.error) {
+            ul.insertAdjacentHTML("beforeend", `<h1 id="error">${obj.error}<h1>`);
+         } else {
+            ul.insertAdjacentHTML("beforeend", 
                `<li class="student-item cf">
                   <div class="student-details">
                      <img class="avatar" src=${obj.picture["large"]} alt="Profile Picture">
@@ -53,6 +56,7 @@ function showPage(list, section) {
                      <span class="date"> Join: ${obj.registered["date"]}</span>
                   </div>
                </li>` );
+               }  
 
       }
    }
@@ -93,7 +97,7 @@ function addPagination(list) {
          button.className ="active";
       
          
-         showPage(data, parseInt(button.textContent));
+         showPage(list, parseInt(button.textContent));
          
 
       }
@@ -101,69 +105,75 @@ function addPagination(list) {
 
 }
 
-function search() {
-   const header = document.querySelector(".header")
+function search(data) {
+   const header = document.querySelector(".header");
    header.insertAdjacentHTML("beforeend",`
                            <label for="search" class="student-search">
                               <input id="search" placeholder="Search by name...">
                               <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
                            </label>`);
+   const buttons = header.querySelector("button");
 
-   header.addEventListener("click", (event) => {
-      if (event.target.tagName === "BUTTON") {
-
-         let txtValue;
+   buttons.addEventListener("click", (event) => {
          let name;
          let input = document.querySelector("#search");
+         input.style.borderColor = "#1e90ff";
          let filter = input.value.toUpperCase();
-         let ul = document.querySelector(".student-list");;
-         let li = ul.getElementsByTagName('li');
+         let objts = data;
+         let matches = [];
 
          // Loop through all list items, and hide those who don't match the search query
-         for (let i = 0; i < li.length; i += 1) {
-            name = li[i].getElementsByTagName("h3")[0];
-            txtValue = name.textContent || name.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-               li[i].style.display = "";
-            } else {
-               li[i].style.display = "none";
+         for (let i = 0; i < objts.length; i += 1) {
+            let obj = objts[i];
+            name = `${obj.name["first"]} ${obj.name["last"]}`;
+            name = name.toLocaleUpperCase();
+            if (name.includes(filter)) {
+               matches.push(obj);
             }
-
-            addPagination(li);
          }
-      }
+         if (matches.length === 0) {
+            input.style.borderColor = "red";
+            matches.push({
+                           error: "Not Found",
+            });
 
-      header.addEventListener("keyup", () => {
-         let txtValue;
-         let counter = 0;
+                     
+      }
+         showPage(matches, 1);
+         addPagination(matches);
+      });
+      
+
+       header.addEventListener("keyup", () => {
          let name;
          let input = document.querySelector("#search");
+         input.style.borderColor = "#1e90ff";
          let filter = input.value.toUpperCase();
-         let ul = document.querySelector(".student-list");;
-         let li = ul.children;
-         for (let i = 0; i < li.length; i += 1) {
-            name = li[i].getElementsByTagName("h3")[0];
-            txtValue = name.textContent || name.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-               li[i].style.display = "";
-            } else {
-               li[i].style.display = "none";
-               counter += 1
-            } 
-            if (li.length === counter) {
-               counter = 0;
-               //notFound();
-              console.log("not found");
-               
-            }
+         let objts = data;
+         let matches = [];
 
-            addPagination(li);
-            
- 
-         } 
-         
+         // Loop through all list items, and hide those who don't match the search query
+         for (let i = 0; i < objts.length; i += 1) {
+            let obj = objts[i];
+            name = `${obj.name["first"]} ${obj.name["last"]}`;
+            name = name.toLocaleUpperCase();
+            if (name.includes(filter)) {
+               matches.push(obj);
+            }
+         }
+         if (matches.length === 0) {
+            input.style.borderColor = "red";
+
+            matches.push({
+                           error: "Not Found",
+            });
+
+                     
+      }
+         showPage(matches, 1);
+         addPagination(matches);
       });
-   });
+  
 
 }
 
@@ -175,4 +185,4 @@ function search() {
 
 showPage(data, 1);
 addPagination(data);
-search();
+search(data);
