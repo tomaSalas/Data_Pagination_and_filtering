@@ -20,18 +20,10 @@ Create the `showPage` function
 This function will create and insert/append the elements needed to display a "page" of nine students
 */
 
-function notFound() {
-   let span = document.createElement("h2");
-   span.textContent = "Not Found";
-   let header = document.querySelector(".header");
-   let input = header.firstElementChild;
-
-   input.insertAdjacentHTML("beforebegin", input);
-
-}
 
 
 
+// this function populate the ul elements with the data supplied
 let perPage = 9;
 function showPage(list, section) {
    let startIndex = (section * perPage) - perPage;
@@ -69,6 +61,9 @@ Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
 
+// this function adds the number of buttons dependen on the data supplied
+
+
 function addPagination(list) {
    let numberOfButtons = Math.ceil(list.length / perPage);
    let ul = document.querySelector(".link-list");
@@ -105,6 +100,38 @@ function addPagination(list) {
 
 }
 
+function hadler() {
+   let name;
+   let input = document.querySelector("#search");
+   input.style.borderColor = "#1e90ff";
+   let filter = input.value.toUpperCase();
+   let objts = data;
+   let matches = [];
+
+   // match the names with the input add them to array
+   for (let i = 0; i < objts.length; i += 1) {
+      let obj = objts[i];
+      name = `${obj.name["first"]} ${obj.name["last"]}`;
+      name = name.toLocaleUpperCase();
+      if (name.includes(filter)) {
+         matches.push(obj);
+      }
+   }
+   if (matches.length === 0) {
+      input.style.borderColor = "red";
+
+      matches.push({
+                     error: "Not Found",
+      });
+
+               
+}
+   showPage(matches, 1);
+   addPagination(matches);
+
+}
+
+
 function search(data) {
    const header = document.querySelector(".header");
    header.insertAdjacentHTML("beforeend",`
@@ -115,69 +142,16 @@ function search(data) {
    const buttons = header.querySelector("button");
 
    buttons.addEventListener("click", (event) => {
-         let name;
-         let input = document.querySelector("#search");
-         input.style.borderColor = "#1e90ff";
-         let filter = input.value.toUpperCase();
-         let objts = data;
-         let matches = [];
-
-         // Loop through all list items, and hide those who don't match the search query
-         for (let i = 0; i < objts.length; i += 1) {
-            let obj = objts[i];
-            name = `${obj.name["first"]} ${obj.name["last"]}`;
-            name = name.toLocaleUpperCase();
-            if (name.includes(filter)) {
-               matches.push(obj);
-            }
-         }
-         if (matches.length === 0) {
-            input.style.borderColor = "red";
-            matches.push({
-                           error: "Not Found",
-            });
-
-                     
-      }
-         showPage(matches, 1);
-         addPagination(matches);
-      });
+      hadler()
+});
       
 
        header.addEventListener("keyup", () => {
-         let name;
-         let input = document.querySelector("#search");
-         input.style.borderColor = "#1e90ff";
-         let filter = input.value.toUpperCase();
-         let objts = data;
-         let matches = [];
-
-         // Loop through all list items, and hide those who don't match the search query
-         for (let i = 0; i < objts.length; i += 1) {
-            let obj = objts[i];
-            name = `${obj.name["first"]} ${obj.name["last"]}`;
-            name = name.toLocaleUpperCase();
-            if (name.includes(filter)) {
-               matches.push(obj);
-            }
-         }
-         if (matches.length === 0) {
-            input.style.borderColor = "red";
-
-            matches.push({
-                           error: "Not Found",
-            });
-
-                     
-      }
-         showPage(matches, 1);
-         addPagination(matches);
-      });
+      hadler()
+});
   
 
 }
-
-
 
 
 
