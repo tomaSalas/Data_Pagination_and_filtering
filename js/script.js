@@ -24,8 +24,8 @@ This function will create and insert/append the elements needed to display a "pa
 
 
 // this function populate the ul elements with the data supplied
-let perPage = 9;
-function showPage(list, section) {
+
+function showPage(list, section, perPage) {
    let startIndex = (section * perPage) - perPage;
    let endIndex = (section * perPage);
    let ul = document.querySelector(".student-list");
@@ -64,7 +64,7 @@ This function will create and insert/append the elements needed for the paginati
 // this function adds the number of buttons dependen on the data supplied
 
 
-function addPagination(list) {
+function addPagination(list, perPage) {
    let numberOfButtons = Math.ceil(list.length / perPage);
    let ul = document.querySelector(".link-list");
    ul.innerHTML = "";
@@ -92,7 +92,7 @@ function addPagination(list) {
          button.className ="active";
       
          
-         showPage(list, parseInt(button.textContent));
+         showPage(list, parseInt(button.textContent), perPage);
          
 
       }
@@ -126,8 +126,8 @@ function hadler() {
 
                
 }
-   showPage(matches, 1);
-   addPagination(matches);
+   showPage(matches, section, perPage);
+   addPagination(matches, perPage);
 
 }
 
@@ -156,7 +156,8 @@ function search(data) {
 
 
 // Call functions
-
-showPage(data, 1);
-addPagination(data);
+let perPage = 9;
+let section = 1;
+showPage(data, section, perPage);
+addPagination(data, perPage);
 search(data);
